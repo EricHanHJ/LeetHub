@@ -1,37 +1,34 @@
 class Solution {
-    public int[] visit;
-    
     public List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> ans = new ArrayList<>();
-        visit = new int[nums.length];
+        List<List<Integer>> result = new ArrayList<>();
         
-        recursive(ans, nums, new ArrayList<>());
+        if(nums != null && nums.length > 0)
+            permute(nums,0,result);
         
-        return ans;
+        return result;
     }
     
-    public void recursive(List<List<Integer>> ans, int[] nums, List<Integer> list)
-    {
-        
-        if (list.size() == nums.length) {
-            System.out.println(list);
-            ans.add(new ArrayList<>(list)); // [2]
+    private void permute(int[] nums, int k, List<List<Integer>> result){
+        if(k == nums.length){
+            List<Integer> ll = new ArrayList<>();
+            for(int i: nums)
+                ll.add(i);
+            
+            result.add(ll);
             return;
         }
         
-        for (int i = 0; i < nums.length; i++) {
-            if (visit[i] == 1) {
-                continue;
-            }
-
-            list.add(nums[i]);
-            visit[i] = 1;
-            
-            recursive(ans, nums, list);
-            visit[i] = 0;
-            
-            list.remove(list.size() - 1);
+        for(int i=k; i < nums.length; i++){
+            swap(nums,i,k);
+            permute(nums,k+1,result);
+            swap(nums,i,k);
         }
+                
+    }
+    
+    private void swap(int[] nums, int i, int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
-
